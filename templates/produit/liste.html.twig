@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit index{% endblock %}
+
+{% block body %}
+    <h1>Produit index</h1>
+    {{ dump(produits) }}
+    <table class="table">
+        <thead>
+            <tr>
+                {# <th>Id</th> #}
+                <th>Nom</th>
+                <th>Tarif</th>
+                <th>Stock</th>
+                <th>Categorie</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+                {# <td>{{ produit.id }}</td> #}
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.tarif }}</td>
+                <td>{{ produit.stock }}</td>
+                <td>{{ produit.idCategorie }}</td>
+                <td>
+                    <form action="{{ path('produit_ajout_panier', {'id': produit.id })}}" method="post">
+                        <input type="hidden" name="token" value="{{ csrf_token('ajout-panier') }}">
+                        <input type="submit" value="Ajouter au panier">
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <form action="{{ path('vider_panier')}}" method="post">
+        <input type="hidden" name="token" value="{{ csrf_token('vider-panier') }}">
+        <input type="submit" value="Vider panier">
+    </form>
+    <a href="{{ path('produit_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <style>#nbPanier {
+                    border: 2px red dotted;
+                    padding: 2px;
+                }
+            </style>
+        {% endblock %}
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+            {% set nb=0 %}
+            {% for unProduit in app.session.get('produits') %}
+                {% set nb=nb+unProduit.qte %}
+            {% endfor %}
+            <nav>
+                <a href="{{ path('client') }}">Liste des clients</a>
+                <a href="{{ path('produit_liste') }}">Liste des produits</a>
+                <a href="{{ path('categorie_index') }}">Liste des categories</a>
+                {% if not is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_login') }}">Connexion</a>
+                {% else %}
+                    <a href="{{ path('vider_panier') }}">Vider le panier</a>
+                    <span id="nbPanier">{{ nb }}</span>
+                    <a href="{{ path('voirPanier') }}">Voir le panier</a>
+                    <a href="{{ path('app_logout') }}">Deconnexion</a>
+                {% endif %}
+            </nav>
+        {% endblock %}
+        {% block body %}{% endblock %}
+    </body>
+</html>

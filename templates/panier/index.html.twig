@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier{% endblock %}
+
+{% block body %}
+    <h1>Récapitulatif de votre panier</h1>
+    {{ dump(app.session.get('produits')) }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Tarif</th>
+                <th>Stock</th>
+                <th>Quantite</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set montantTotal=0 %}
+            {% for id, ligneProduit in panier %}
+                {% set montantTotal=montantTotal+ligneProduit['produit'].tarif * ligneProduit['qte'] %}
+                <tr>
+                    <td>{{ ligneProduit['produit'].nom }}</td>
+                    <td>{{ ligneProduit['produit'].tarif }}</td>
+                    <td>{{ ligneProduit['produit'].stock }}</td>
+                    <td>{{ ligneProduit['qte']}}</td>
+                    <td>{{ ligneProduit['produit'].tarif *  ligneProduit['qte']}}</td>
+                    <td>
+                        <form action="{{ path('produit_ajout_panier', {'id':id}) }}" method="post">
+                            <input type="hidden" name="token" value="{{ csrf_token('ajout-panier') }}">
+                            <input type="submit" value="+">
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Panier vide</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    {# <td>{{ produit.id }}</td> #}
+                    <td colspan="5">Montant total</td>
+                    <td>{{ montantTotal }}</td>
+                </tr>
+        </tbody>
+    </table>
+{% endblock %}

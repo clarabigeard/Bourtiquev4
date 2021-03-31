@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suppression d'un client{% endblock %}
+
+{% block body %}
+    <style>
+        .warning {color: #e00f16;border: 4px #f6b33e solid !important;padding: 5px;}
+        .warning input {display: block;margin: auto;}
+        .retour {display: block;margin: auto;width: max-content;}
+    </style>
+    <h3>Suppression d'un client</h3>
+    {{ dump(leClient) }}
+        <form action="{{ path('client_delete',{id:leClient.id}) }}" method="post">
+            <div class="warning">
+                <input type="submit" value="Suppression du client {{ leClient.nom }}, {{ leClient.prenom }}, {{ leClient.email }} ?">
+            </div>
+            <div>ou</div>
+            <div class="warning">
+                <a href="{{ path('client') }}">Retour à la liste des clients</a>
+            </div>
+            <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+        </form>
+{% endblock %}
